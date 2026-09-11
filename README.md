@@ -147,18 +147,27 @@ npm run check:data
 Both builds are static — no environment variables, no backend, no server-side rendering —
 so every option below is free, permanently, at this scale.
 
-### Option A — GitHub Pages (zero extra accounts)
+### Option A — GitHub Pages, deployed manually (what this repo uses)
 
-`.github/workflows/deploy.yml` is already committed. Push to `main`, then in the repo go to
-**Settings → Pages → Source → GitHub Actions**. That's the whole setup. It publishes:
+```bash
+npm run deploy
+```
+
+One command. It builds `@clickguard/ui`, the prototype and Storybook, validates the mock
+data, assembles everything into `_site/`, and force-pushes that to the `gh-pages` branch
+via a git worktree. `main` stays source-only, so anyone reading the repository sees code
+rather than build output.
 
 ```
 https://<user>.github.io/<repo>/             → prototype
 https://<user>.github.io/<repo>/storybook/   → Storybook
 ```
 
-Free and unlimited for public repos. The workflow runs `npm run check` first, so a deploy
-fails rather than shipping a screen whose evidence doesn't add up.
+**First time only**, in the repository: **Settings → Pages → Source → "Deploy from a
+branch" → `gh-pages` / (root)**. The repo must be public for free Pages hosting. After
+that, every later deploy is just `npm run deploy` again.
+
+Free and unlimited for public repos, and no CI to configure.
 
 ### Option B — Vercel or Cloudflare Pages (two separate URLs)
 

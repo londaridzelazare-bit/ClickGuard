@@ -16,7 +16,8 @@
     "storybook": "npm run storybook --workspace @clickguard/ui",
     "typecheck": "npm run typecheck --workspace @clickguard/ui && npm run typecheck --workspace @clickguard/prototype",
     "check:data": "node scripts/check-data.mjs",
-    "check": "npm run typecheck && npm run check:data"
+    "check": "npm run typecheck && npm run check:data",
+    "deploy": "node scripts/deploy-pages.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -1,6 +1,8 @@
 node_modules/
 dist/
 storybook-static/
+_site/
+.gh-pages-worktree/
 *.log
 .DS_Store
 .vercel
