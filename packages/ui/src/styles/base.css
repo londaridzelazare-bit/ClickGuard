@@ -1,0 +1,85 @@
+/* Base layer. Opt-in: consumers import `@clickguard/ui/styles.css`, which
+   pulls tokens + base + every component stylesheet. */
+
+/* Border-box everywhere inside a design-system scope. Without this, any
+   `height: 100%` box that also has padding overflows its parent — which is
+   exactly how a `overflow: hidden` shell ends up silently scrolled by 30px
+   when a row inside it takes focus. */
+.cg-root,
+.cg-scope,
+.cg-root *,
+.cg-scope *,
+.cg-root *::before,
+.cg-scope *::before,
+.cg-root *::after,
+.cg-scope *::after {
+  box-sizing: border-box;
+}
+
+.cg-root,
+.cg-scope {
+  font-family: var(--cg-font-sans);
+  font-size: var(--cg-text-13);
+  line-height: var(--cg-leading-normal);
+  color: var(--cg-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Every interactive element in the system shares one focus treatment, so
+   keyboard users get a consistent signal regardless of component. */
+.cg-focusable:focus-visible,
+.cg-root :where(button, a, input, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: var(--cg-focus-ring);
+  border-radius: var(--cg-radius-sm);
+}
+
+.cg-mono {
+  font-family: var(--cg-font-mono);
+  font-variant-ligatures: none;
+}
+
+.cg-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visually hidden but read by assistive tech. */
+.cg-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cg-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+@keyframes cg-shimmer {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+@keyframes cg-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cg-root *,
+  .cg-scope * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+storybook-static/
+*.log
+.DS_Store
+.vercel
+.netlify
+.vite
+coverage/
+*.tsbuildinfo
+.env
+.env.local

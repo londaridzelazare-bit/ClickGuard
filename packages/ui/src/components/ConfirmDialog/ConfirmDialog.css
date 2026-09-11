@@ -1,0 +1,44 @@
+.cg-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--cg-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  padding: var(--cg-space-24);
+}
+
+.cg-dialog {
+  width: 440px;
+  max-width: 100%;
+  background: var(--cg-surface-0);
+  border-radius: var(--cg-radius-lg);
+  border: 1px solid var(--cg-border);
+  padding: var(--cg-space-24);
+  box-shadow: var(--cg-shadow-dialog);
+}
+
+.cg-dialog__title {
+  font-size: var(--cg-text-16);
+  font-weight: var(--cg-weight-medium);
+  margin: 0;
+}
+
+/* The body of an unblock dialog spells out what the customer is taking on:
+   the ads start showing again, and clicks cost money. A confirm step that
+   only says "Are you sure?" transfers no information and buys no trust. */
+.cg-dialog__body {
+  margin: var(--cg-space-10) 0 0;
+  font-size: var(--cg-text-13);
+  color: var(--cg-text-secondary);
+  line-height: var(--cg-leading-relaxed);
+  text-wrap: pretty;
+}
+
+.cg-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--cg-space-8);
+  margin-top: var(--cg-space-20);
+}

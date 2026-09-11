@@ -1,0 +1,139 @@
+/* ============================================================================
+   ClickGuard design tokens
+   ----------------------------------------------------------------------------
+   This file is the ONLY place a raw value (hex, px, ms, cubic-bezier) is
+   allowed to appear in the design system. Every component stylesheet in this
+   package — and every screen in the prototype — must reference these
+   custom properties. If you find yourself typing `#d13b2d` anywhere else,
+   the token is missing; add it here instead.
+   ========================================================================= */
+
+:root {
+  /* --- Typography ------------------------------------------------------- */
+  --cg-font-sans: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --cg-font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* One heading weight, one body weight. Nothing else. */
+  --cg-weight-regular: 400;
+  --cg-weight-medium: 500;
+
+  --cg-text-11: 11px; /* column labels, tags */
+  --cg-text-12: 12px; /* sublines, chips, baselines, sync status */
+  --cg-text-13: 13px; /* table text, body, verdict sentence, buttons */
+  --cg-text-14: 14px; /* section titles */
+  --cg-text-16: 16px; /* empty-state headline */
+  --cg-text-18: 18px; /* drawer values */
+  --cg-text-22: 22px; /* page title, page metric values */
+
+  --cg-leading-tight: 1.2;
+  --cg-leading-normal: 1.4;
+  --cg-leading-relaxed: 1.55;
+
+  /* --- Neutral surfaces & ink ------------------------------------------- */
+  --cg-surface-0: #ffffff; /* raised: cards, table, drawer */
+  --cg-surface-1: #f9f9f7; /* page */
+  --cg-surface-2: #f3f3f0; /* hover, inert fills */
+  --cg-surface-3: #e9e9e5; /* tracks, skeletons */
+
+  --cg-text-primary: #1c1c1a;
+  --cg-text-secondary: #5a5a54;
+  --cg-text-muted: #8b8b84;
+  --cg-text-inverse: #ffffff;
+
+  --cg-border: #e3e3df; /* default */
+  --cg-border-strong: #c8c8c2; /* interactive outlines: buttons, inputs */
+  --cg-border-subtle: #eeeeea; /* row dividers */
+
+  /* --- Semantic roles ---------------------------------------------------
+     Every role is a 4-tuple: bg / border / text / fill.
+     `fill` is the saturated one — only for bars, dots and solid buttons.
+     `text` is the darkened one — it is the only one that passes contrast
+     on the role's own bg.
+     --------------------------------------------------------------------- */
+
+  /* danger — Blocked */
+  --cg-danger-bg: #fdf1ef;
+  --cg-danger-border: #f2c9c3;
+  --cg-danger-text: #a02b20;
+  --cg-danger-fill: #d13b2d;
+
+  /* warning — Flagged, and the "Paid" source tag */
+  --cg-warning-bg: #fdf6e6;
+  --cg-warning-border: #f0dca8;
+  --cg-warning-text: #86560a;
+  --cg-warning-fill: #d69412;
+
+  /* success — Clean, and money saved */
+  --cg-success-bg: #edf7ef;
+  --cg-success-border: #bfe0c6;
+  --cg-success-text: #1f6b36;
+  --cg-success-fill: #2f9a4f;
+
+  /* accent — selection and links. Never a status. */
+  --cg-accent-bg: #eef2fb;
+  --cg-accent-border: #c5d1f0;
+  --cg-accent-text: #2a4db3;
+  --cg-accent-fill: #3a63d6;
+  --cg-accent-text-hover: #1f3c8f;
+
+  /* neutral — Unblocked by you, and the "Organic" source tag */
+  --cg-neutral-bg: #f3f3f0;
+  --cg-neutral-border: #d6d6d0;
+  --cg-neutral-text: #5a5a54;
+  --cg-neutral-fill: #9a9a92;
+
+  /* --- Spacing ----------------------------------------------------------
+     Documented scale: 4 · 8 · 12 · 16 · 24 · 32.
+     The odd steps exist for optical alignment inside dense rows only.
+     --------------------------------------------------------------------- */
+  --cg-space-2: 2px;
+  --cg-space-4: 4px;
+  --cg-space-6: 6px;
+  --cg-space-8: 8px;
+  --cg-space-10: 10px;
+  --cg-space-12: 12px;
+  --cg-space-14: 14px;
+  --cg-space-16: 16px;
+  --cg-space-20: 20px;
+  --cg-space-24: 24px;
+  --cg-space-32: 32px;
+  --cg-space-40: 40px;
+  --cg-space-48: 48px;
+  --cg-space-64: 64px;
+  --cg-space-72: 72px;
+  --cg-space-80: 80px;
+
+  /* --- Radii ------------------------------------------------------------ */
+  --cg-radius-xs: 4px; /* checkbox */
+  --cg-radius-sm: 6px; /* inputs */
+  --cg-radius-md: 8px; /* controls, buttons */
+  --cg-radius-lg: 12px; /* cards, drawer, dialog */
+  --cg-radius-pill: 999px; /* pills, chips */
+
+  /* --- Elevation & scrim ------------------------------------------------ */
+  --cg-shadow-drawer: -16px 0 40px rgba(28, 28, 26, 0.1);
+  --cg-shadow-dialog: 0 16px 48px rgba(28, 28, 26, 0.16);
+  --cg-shadow-toast: 0 8px 24px rgba(28, 28, 26, 0.14);
+  --cg-scrim: rgba(28, 28, 26, 0.32);
+
+  /* --- Motion ------------------------------------------------------------ */
+  --cg-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --cg-duration-fast: 120ms;
+  --cg-duration-normal: 180ms;
+  --cg-duration-drawer: 280ms;
+
+  /* --- Focus ------------------------------------------------------------- */
+  --cg-focus-ring: 0 0 0 2px var(--cg-surface-0), 0 0 0 4px var(--cg-accent-fill);
+
+  /* --- Component metrics ------------------------------------------------- */
+  --cg-row-height: 56px;
+  --cg-header-height: 40px;
+  --cg-control-height: 34px;
+  --cg-drawer-width: 560px;
+  --cg-bar-track-width: 64px;
+  --cg-bar-track-height: 4px;
+}
+
+/* Tokens are defined once and consumed everywhere. Components never redefine
+   them; they only read them. A theme would override this block and nothing
+   else would have to change. */

@@ -1,0 +1,9 @@
+# Normalise to LF in the repository. The GitHub Actions runner is Linux, and a
+# workflow `run:` block checked out with CRLF fails there.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending normalised.
+*.png binary
+*.jpg binary
+*.woff2 binary
+*.ico binary

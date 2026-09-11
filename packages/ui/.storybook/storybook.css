@@ -1,0 +1,127 @@
+/* Storybook-only helpers for laying out story canvases. These never ship in
+   the package bundle — they exist so stories can show several states side by
+   side without inventing layout primitives the product does not need. */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap");
+
+body {
+  margin: 0;
+  background: var(--cg-surface-1);
+}
+
+.sb-row {
+  display: flex;
+  gap: var(--cg-space-8);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Stretch, not flex-start: components that size to their container (the
+   journey timeline, the threat bar) otherwise collapse to their content width
+   and the story shows them at a size the product never renders. */
+.sb-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cg-space-12);
+  align-items: stretch;
+  max-width: 560px;
+}
+
+.sb-stack--inline {
+  align-items: flex-start;
+  max-width: none;
+}
+
+.sb-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--cg-space-16);
+}
+
+.sb-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--cg-space-16);
+}
+
+.sb-panel {
+  background: var(--cg-surface-0);
+  border: 1px solid var(--cg-border);
+  border-radius: var(--cg-radius-lg);
+  padding: var(--cg-space-16) var(--cg-space-20);
+  max-width: 560px;
+}
+
+.sb-label {
+  font-size: var(--cg-text-11);
+  color: var(--cg-text-muted);
+  margin-bottom: var(--cg-space-6);
+}
+
+.sb-section-title {
+  font-size: var(--cg-text-14);
+  font-weight: var(--cg-weight-medium);
+  margin: var(--cg-space-24) 0 var(--cg-space-12);
+}
+.sb-section-title:first-child { margin-top: 0; }
+
+.sb-note {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+  max-width: 620px;
+  margin-top: var(--cg-space-8);
+  line-height: var(--cg-leading-relaxed);
+}
+
+/* --- token documentation --- */
+.sb-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--cg-space-12);
+  max-width: 720px;
+}
+
+.sb-swatch__chip {
+  height: 44px;
+  border-radius: var(--cg-radius-md);
+  border: 1px solid var(--cg-border);
+}
+
+.sb-swatch__name {
+  margin-top: var(--cg-space-6);
+  font-size: var(--cg-text-13);
+}
+
+.sb-swatch__meta {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+}
+
+.sb-roles {
+  display: grid;
+  grid-template-columns: 110px repeat(4, minmax(0, 1fr));
+  gap: var(--cg-space-8) var(--cg-space-12);
+  align-items: center;
+  font-size: var(--cg-text-12);
+  max-width: 720px;
+}
+
+.sb-role__chip {
+  height: 36px;
+  border-radius: var(--cg-radius-md);
+  border: 1px solid var(--cg-border);
+}
+
+.sb-type {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: var(--cg-space-10) var(--cg-space-16);
+  align-items: baseline;
+  max-width: 720px;
+}
+
+.sb-type__meta {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+  font-variant-numeric: tabular-nums;
+}

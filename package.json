@@ -1,0 +1,24 @@
+{
+  "name": "clickguard",
+  "private": true,
+  "version": "1.0.0",
+  "description": "ClickGuard Threat Monitoring — React prototype + @clickguard/ui design system",
+  "workspaces": [
+    "packages/ui",
+    "apps/prototype"
+  ],
+  "scripts": {
+    "build:ui": "npm run build --workspace @clickguard/ui",
+    "build:app": "npm run build --workspace @clickguard/prototype",
+    "build": "npm run build:ui && npm run build:app",
+    "build:storybook": "npm run build:ui && npm run build-storybook --workspace @clickguard/ui",
+    "dev": "npm run build:ui && npm run dev --workspace @clickguard/prototype",
+    "storybook": "npm run storybook --workspace @clickguard/ui",
+    "typecheck": "npm run typecheck --workspace @clickguard/ui && npm run typecheck --workspace @clickguard/prototype",
+    "check:data": "node scripts/check-data.mjs",
+    "check": "npm run typecheck && npm run check:data"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

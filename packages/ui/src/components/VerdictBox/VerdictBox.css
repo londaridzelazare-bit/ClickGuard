@@ -1,0 +1,72 @@
+/* The single most important component in the product.
+   It is the first thing in the drawer, and it answers "why?" in one sentence
+   before any evidence is shown. Everything below it is backup. */
+
+.cg-verdict {
+  padding: var(--cg-space-14) var(--cg-space-16);
+  border-radius: var(--cg-radius-lg);
+  border: 1px solid;
+}
+
+.cg-verdict--danger {
+  background: var(--cg-danger-bg);
+  border-color: var(--cg-danger-border);
+}
+.cg-verdict--danger .cg-verdict__title { color: var(--cg-danger-text); }
+
+.cg-verdict--warning {
+  background: var(--cg-warning-bg);
+  border-color: var(--cg-warning-border);
+}
+.cg-verdict--warning .cg-verdict__title { color: var(--cg-warning-text); }
+
+.cg-verdict--success {
+  background: var(--cg-success-bg);
+  border-color: var(--cg-success-border);
+}
+.cg-verdict--success .cg-verdict__title { color: var(--cg-success-text); }
+
+.cg-verdict--neutral {
+  background: var(--cg-neutral-bg);
+  border-color: var(--cg-neutral-border);
+}
+.cg-verdict--neutral .cg-verdict__title { color: var(--cg-neutral-text); }
+
+.cg-verdict--accent {
+  background: var(--cg-accent-bg);
+  border-color: var(--cg-accent-border);
+}
+.cg-verdict--accent .cg-verdict__title { color: var(--cg-accent-text); }
+
+.cg-verdict__title {
+  font-size: var(--cg-text-13);
+  font-weight: var(--cg-weight-medium);
+}
+
+.cg-verdict__body {
+  margin-top: var(--cg-space-6);
+  font-size: var(--cg-text-13);
+  line-height: var(--cg-leading-relaxed);
+  color: var(--cg-text-primary);
+  text-wrap: pretty;
+}
+
+/* The note is where the product admits something went wrong — a sync that
+   has not landed, an expired token. It sits inside the verdict rather than
+   in a separate banner, because a caveat the user has to hunt for reads as
+   a caveat the product tried to hide. */
+.cg-verdict__note {
+  margin-top: var(--cg-space-8);
+  padding-top: var(--cg-space-8);
+  border-top: 1px solid currentColor;
+  font-size: var(--cg-text-12);
+  line-height: var(--cg-leading-relaxed);
+  color: var(--cg-text-secondary);
+  text-wrap: pretty;
+}
+
+.cg-verdict--danger .cg-verdict__note { border-top-color: var(--cg-danger-border); }
+.cg-verdict--warning .cg-verdict__note { border-top-color: var(--cg-warning-border); }
+.cg-verdict--success .cg-verdict__note { border-top-color: var(--cg-success-border); }
+.cg-verdict--neutral .cg-verdict__note { border-top-color: var(--cg-neutral-border); }
+.cg-verdict--accent .cg-verdict__note { border-top-color: var(--cg-accent-border); }

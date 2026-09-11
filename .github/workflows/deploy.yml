@@ -1,0 +1,65 @@
+name: Deploy prototype and Storybook
+
+# Publishes both deliverables to GitHub Pages as one static site:
+#   /            → the Threat Monitoring prototype
+#   /storybook/  → the @clickguard/ui Storybook
+#
+# Both builds emit relative asset URLs (the prototype via `base: "./"` in its
+# Vite config, Storybook by default), so serving them from a subpath works
+# without any extra configuration.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Guards the brief's red flag: mock data that doesn't reflect the
+      # product mechanics. Fails the deploy rather than shipping a screen
+      # whose evidence doesn't add up.
+      - run: npm run check
+
+      - run: npm run build
+      - run: npm run build:storybook
+
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          cp -r apps/prototype/dist/. _site/
+          mkdir -p _site/storybook
+          cp -r packages/ui/storybook-static/. _site/storybook/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

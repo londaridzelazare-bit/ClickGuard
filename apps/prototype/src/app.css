@@ -1,0 +1,294 @@
+/* Screen-level layout for Threat Monitoring.
+   Every value here is a design-system token. If a value is missing, the fix is
+   to add a token in `@clickguard/ui`, not to type a hex here. */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--cg-surface-3);
+  font-family: var(--cg-font-sans);
+}
+
+.app {
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--cg-surface-1);
+  color: var(--cg-text-primary);
+  font-size: var(--cg-text-13);
+  line-height: var(--cg-leading-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- app shell ---------------------------------------------------------- */
+
+.topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--cg-space-32);
+  gap: var(--cg-space-24);
+  background: var(--cg-surface-0);
+  border-bottom: 1px solid var(--cg-border);
+  flex: none;
+  z-index: 30;
+}
+
+.topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-8);
+  font-weight: var(--cg-weight-medium);
+  font-size: var(--cg-text-14);
+  flex: none;
+}
+
+.topbar__mark {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--cg-radius-xs);
+  background: var(--cg-text-primary);
+  display: inline-block;
+}
+
+.topbar__nav {
+  display: flex;
+  gap: var(--cg-space-2);
+  font-size: var(--cg-text-13);
+}
+
+.topbar__link {
+  padding: var(--cg-space-4) var(--cg-space-10);
+  border-radius: var(--cg-radius-md);
+  color: var(--cg-text-secondary);
+  background: none;
+  border: 0;
+  font: inherit;
+  cursor: default;
+}
+
+.topbar__link--active {
+  background: var(--cg-surface-2);
+  color: var(--cg-text-primary);
+  font-weight: var(--cg-weight-medium);
+}
+
+.topbar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-10);
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-secondary);
+}
+
+.topbar__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--cg-surface-3);
+  border: 1px solid var(--cg-neutral-border);
+}
+
+/* The scenario switcher is prototype scaffolding, not product chrome. The
+   dashed outline says so, so a reviewer never mistakes it for a feature. */
+.scenario {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-6);
+  border: 1px dashed var(--cg-border-strong);
+  border-radius: var(--cg-radius-md);
+  padding: var(--cg-space-2) var(--cg-space-8);
+  font-size: var(--cg-text-11);
+  color: var(--cg-text-muted);
+}
+
+.scenario select {
+  font: inherit;
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-primary);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: var(--cg-space-2) 0;
+}
+
+.scenario select:focus-visible {
+  outline: none;
+  box-shadow: var(--cg-focus-ring);
+  border-radius: var(--cg-radius-xs);
+}
+
+/* --- page --------------------------------------------------------------- */
+
+/* The drawer is positioned against this, not against `.app`, so it starts
+   below the top bar instead of sliding underneath it. */
+.workspace {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.page {
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--cg-space-24) var(--cg-space-32) var(--cg-space-32);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cg-space-20);
+}
+
+.page__head {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--cg-space-16);
+  flex-wrap: wrap;
+}
+
+.page__title {
+  margin: 0;
+  font-size: var(--cg-text-22);
+  font-weight: var(--cg-weight-medium);
+  line-height: var(--cg-leading-tight);
+}
+
+.page__head-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-12);
+}
+
+.freshness {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-6);
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-secondary);
+}
+
+.freshness__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cg-success-fill);
+  display: inline-block;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--cg-space-16);
+}
+
+/* --- toolbar ------------------------------------------------------------ */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-8);
+  flex-wrap: wrap;
+}
+
+.toolbar__divider {
+  width: 1px;
+  height: 22px;
+  background: var(--cg-border);
+  margin: 0 var(--cg-space-4);
+}
+
+.toolbar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-14);
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+}
+
+.toolbar__count {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* --- table cell composition --------------------------------------------- */
+
+.cell-sub {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+  margin-top: var(--cg-space-2);
+}
+
+.cell-ip {
+  font-family: var(--cg-font-mono);
+  font-size: var(--cg-text-13);
+}
+
+.cell-blocked {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-6);
+  flex-wrap: wrap;
+}
+
+.cell-muted { color: var(--cg-text-secondary); }
+
+/* --- drawer contents ---------------------------------------------------- */
+
+.detail__id {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-10);
+  flex-wrap: wrap;
+}
+
+.detail__ip {
+  font-family: var(--cg-font-mono);
+  font-size: var(--cg-text-18);
+  font-weight: var(--cg-weight-medium);
+  line-height: var(--cg-leading-tight);
+}
+
+.detail__identity {
+  font-size: var(--cg-text-13);
+  color: var(--cg-text-secondary);
+  margin-top: var(--cg-space-6);
+}
+
+.detail__device {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+  margin-top: var(--cg-space-2);
+}
+
+.detail__money {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cg-space-12);
+  padding: var(--cg-space-20) var(--cg-space-24) 0;
+}
+
+.detail__hint {
+  padding: var(--cg-space-16) var(--cg-space-24) 0;
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+  line-height: var(--cg-leading-relaxed);
+  text-wrap: pretty;
+}
+
+/* --- responsive --------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .metrics { grid-template-columns: 1fr; }
+  .page { padding: var(--cg-space-16); }
+  .topbar { padding: 0 var(--cg-space-16); }
+  .topbar__nav { display: none; }
+}
