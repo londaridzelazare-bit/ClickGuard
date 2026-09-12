@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { cx } from "../../utils/cx";
 import { BLOCK_THRESHOLD } from "../../tokens";
 import { StatusPill } from "../StatusPill/StatusPill";
+import { Icon } from "../Icon/Icon";
 import "./JourneyTimeline.css";
 
 export interface JourneyVisit {
@@ -67,7 +68,8 @@ export function JourneyTimeline({
                   ···
                 </span>
                 <span className="cg-journey__gap-label">
-                  {item.count} more {item.count === 1 ? "visit" : "visits"} ▾
+                  {item.count} more {item.count === 1 ? "visit" : "visits"}
+                  <Icon name="chevronDown" size="sm" />
                 </span>
               </button>
             </li>

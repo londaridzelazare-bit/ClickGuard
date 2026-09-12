@@ -27,19 +27,20 @@
   box-shadow: var(--cg-focus-ring);
 }
 
-/* Active uses accent, not a status color — a filter is a selection, not a
-   verdict. Keeping those two vocabularies apart is what stops the toolbar
-   from looking like it is making claims about the data. */
+/* Active is solid ink — the same treatment as a checked checkbox, because
+   they mean the same thing: you picked this. Deliberately not a status
+   colour (a filter is a selection, not a verdict) and no longer accent,
+   which is now reserved for links. */
 .cg-chip[aria-pressed="true"] {
-  background: var(--cg-accent-bg);
-  border-color: var(--cg-accent-border);
-  color: var(--cg-accent-text);
+  background: var(--cg-selected-fill);
+  border-color: var(--cg-selected-border);
+  color: var(--cg-selected-on-fill);
   font-weight: var(--cg-weight-medium);
 }
 
-.cg-chip[aria-pressed="true"]:hover {
-  background: var(--cg-accent-bg);
-  border-color: var(--cg-accent-text);
+.cg-chip[aria-pressed="true"]:hover:not(:disabled) {
+  background: var(--cg-text-secondary);
+  border-color: var(--cg-text-secondary);
 }
 
 .cg-chip:disabled {
@@ -52,6 +53,7 @@
   color: var(--cg-text-muted);
 }
 
+/* On ink, the count needs to stay legible but still read as secondary. */
 .cg-chip[aria-pressed="true"] .cg-chip__count {
-  color: var(--cg-accent-text);
+  color: var(--cg-neutral-border);
 }

@@ -82,6 +82,20 @@
   --cg-neutral-text: #5a5a54;
   --cg-neutral-fill: #9a9a92;
 
+  /* --- Selection --------------------------------------------------------
+     "You picked this" is ink, not accent. One vocabulary for every control
+     the user can select — checkboxes, filter chips, calendar days, the
+     drilled-in row — so selection never reads as a status or a link.
+     Accent is now reserved for links alone.
+     --------------------------------------------------------------------- */
+  --cg-selected-fill: var(--cg-text-primary);
+  --cg-selected-on-fill: var(--cg-text-inverse);
+  --cg-selected-border: var(--cg-text-primary);
+  /* Quieter tint for large selected areas (a table row, a day inside a
+     range) where a solid ink fill would shout. */
+  --cg-selected-surface: #ececeA;
+  --cg-selected-surface-strong: #e2e2de;
+
   /* --- Spacing ----------------------------------------------------------
      Documented scale: 4 · 8 · 12 · 16 · 24 · 32.
      The odd steps exist for optical alignment inside dense rows only.
@@ -122,8 +136,28 @@
   --cg-duration-normal: 180ms;
   --cg-duration-drawer: 280ms;
 
-  /* --- Focus ------------------------------------------------------------- */
-  --cg-focus-ring: 0 0 0 2px var(--cg-surface-0), 0 0 0 4px var(--cg-accent-fill);
+  /* --- Focus -------------------------------------------------------------
+     Ink, not accent. A blue focus ring next to an ink selected state reads
+     as two different kinds of "active"; one colour for both is calmer and
+     leaves accent meaning "link" and nothing else.
+     --------------------------------------------------------------------- */
+  --cg-focus-color: var(--cg-text-primary);
+  --cg-focus-width: 2px;
+  /* Detached ring for controls that sit on a surface with room around them. */
+  --cg-focus-ring: 0 0 0 2px var(--cg-surface-0), 0 0 0 4px var(--cg-focus-color);
+  /* Inset ring for controls whose own border would otherwise double up with
+     an outline — see SearchInput. */
+  --cg-focus-inset-offset: -2px;
+
+  /* --- Icons -------------------------------------------------------------
+     One 16px grid, one stroke weight. Icons are stroked rather than filled
+     so they hold up next to 13px text without going muddy.
+     --------------------------------------------------------------------- */
+  --cg-icon-sm: 12px;
+  --cg-icon-md: 16px;
+  --cg-icon-lg: 20px;
+  --cg-icon-stroke: 1.5;
+  --cg-icon-badge: 28px;
 
   /* --- Component metrics ------------------------------------------------- */
   --cg-row-height: 56px;

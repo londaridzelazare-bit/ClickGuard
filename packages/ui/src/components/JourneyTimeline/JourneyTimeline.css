@@ -173,4 +173,7 @@
 .cg-journey__gap-label {
   font-size: var(--cg-text-12);
   color: var(--cg-accent-text);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cg-space-4);
 }

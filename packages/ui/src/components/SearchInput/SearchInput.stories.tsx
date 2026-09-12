@@ -12,23 +12,57 @@ export const Search: Story = {
     const [value, setValue] = useState("");
     return (
       <div className="sb-stack">
+        <div>
+          <div className="sb-label">Default — click in to see the focus treatment</div>
+          <SearchInput
+            value={value}
+            onValueChange={setValue}
+            placeholder="Search by IP or location"
+            label="Search visitors"
+          />
+        </div>
+        <div>
+          <div className="sb-label">Filled, with its clear affordance</div>
+          <SearchInput
+            value="Frankfurt"
+            onValueChange={() => {}}
+            placeholder="Search by IP or location"
+            label="Search visitors, filled"
+          />
+        </div>
+        <p className="sb-note">
+          One search box covers IP, city, country, connection type and threat label —
+          splitting them into five fields would make the user decide which one their
+          string belongs to before they can look for it.
+        </p>
+      </div>
+    );
+  },
+};
+
+export const FocusAndHover: Story = {
+  name: "Focus is one line, not three",
+  render: () => {
+    const [value, setValue] = useState("");
+    return (
+      <div className="sb-stack">
         <SearchInput
           value={value}
           onValueChange={setValue}
-          placeholder="Search by IP or location"
-          label="Search visitors"
-        />
-        <SearchInput
-          value="Frankfurt"
-          onValueChange={() => {}}
-          placeholder="Search by IP or location"
-          label="Search visitors, filled"
+          placeholder="Tab or click into me"
+          label="Focus demonstration"
         />
         <p className="sb-note">
-          Empty, and filled with its clear affordance. One search box covers IP,
-          city, country and connection type — splitting them into four fields would
-          make the user decide which one their string belongs to before they can
-          look for it.
+          This field used to set <code>border-color</code> <em>and</em> a two-layer
+          box-shadow ring on focus, which painted three concentric lines. It now
+          draws a single black outline at a negative offset, so the outline lands
+          exactly on top of the 1px border instead of around it. Hover is a separate,
+          quieter signal: the border darkens and the surface tints, and it stands
+          down as soon as the field takes focus so the two never stack.
+        </p>
+        <p className="sb-note">
+          The focus colour comes from <code>--cg-focus-color</code>, which is ink
+          across the whole system — the same value the selected states use.
         </p>
       </div>
     );

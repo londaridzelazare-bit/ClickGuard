@@ -141,7 +141,63 @@ The pattern: AI was fast and fluent at surfaces, and unreliable at **invariants*
 
 ---
 
-## 7. Known limits
+## 7. Second pass — selection, focus, date range, reporting
+
+A later round of changes, all made in `@clickguard/ui` and documented in Storybook
+rather than patched into the screen.
+
+**Selection became one colour.** Checked checkboxes were already ink; active filter
+chips and the drilled-in table row were accent blue. Two different colours for the
+same gesture is one vocabulary too many, so selection now draws from a single
+`--cg-selected-*` group: solid ink for small controls (chips, checkboxes, calendar
+endpoints), a quiet ink-tinted surface plus an ink rail for large ones (the active
+row). Accent is now reserved for links and nothing else. The focus ring moved to ink
+for the same reason — a blue focus ring beside an ink selected state reads as two
+kinds of "active".
+
+**The search field's triple outline.** Focus was setting `border-color` *and* a
+two-layer box-shadow ring, which painted three concentric lines. It now draws one
+outline at a negative offset so it lands *on* the border rather than around it.
+Hover is a separate, quieter signal that stands down as soon as focus arrives, so
+the two never stack. The same treatment is now shared by `TextArea`.
+
+**Metric icons.** There was no icon library — just inline SVGs copy-pasted into five
+components. That is the duplication red flag in miniature, so the set moved into
+`Icon` with a single 16px grid and stroke weight, and every component now draws from
+it. The three metrics get distinct *shapes* (blocked shield, checked shield, flag)
+in tones borrowed from the same role tokens the statuses use. Badges are
+`aria-hidden` because the card's text label already carries the meaning.
+
+**The date range became real.** It was a decorative button. It is now a
+`DateRangePicker`: two months, presets, month navigation, hover preview, keyboard
+grid navigation, and an explicit Apply. The draft lives inside the panel so nothing
+reaches the page until Apply — which makes Cancel a true revert and means a
+half-made selection can never filter the table out from under the user. Ranges
+running backwards are made *unreachable* (clicking before the start restarts the
+selection) rather than validated after the fact.
+
+Two consequences worth naming. First, **metrics now describe exactly the rows on
+screen** — the same set the table renders, after date, chips and search. Summarising
+a wider set than the one directly beneath them is how a dashboard ends up
+contradicting itself. Second, the mock data had to change: every journey sat inside
+a 21-day window, so 14-day and 30-day views returned identical results and the
+control looked inert. Six visitors moved back to 40–70 days. A control that does not
+visibly change anything is indistinguishable from a broken one.
+
+**Report a mistake** became a real modal instead of a fire-and-forget toast. The
+reason field is genuinely optional with no separate "skip": Submit is always enabled
+and an empty report is valid, because the useful signal is *that* a customer
+disagreed, not why. Confirmation replaces the form in place rather than relying on a
+toast the user may miss. Focus trapping, Escape and focus restoration live in a
+shared `Modal` primitive that `ConfirmDialog` now also uses — it previously had none
+of the three, and its duplicate stylesheet was deleted.
+
+**A bug worth recording:** `Modal` originally focused its first element inside
+`requestAnimationFrame`. rAF does not fire in a backgrounded tab, so a modal opened
+there would never take focus and the trap would have nothing to trap. It uses
+`setTimeout` now.
+
+## 8. Known limits
 
 - Mock data only; no backend. `NOW` is pinned to 2026-09-12 10:40 so timestamps are identical for every reviewer.
 - Sync state changes optimistically — a real build would poll the platform APIs.

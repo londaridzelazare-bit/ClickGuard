@@ -1,6 +1,6 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { Button, type ButtonVariant } from "../Button/Button";
-import "./ConfirmDialog.css";
+import { Modal } from "../Modal/Modal";
 
 export interface ConfirmDialogProps {
   open: boolean;
@@ -14,6 +14,11 @@ export interface ConfirmDialogProps {
   onCancel(): void;
 }
 
+/**
+ * A yes/no dialog. Thin composition over `Modal`, which owns the scrim, the
+ * focus trap, Escape handling and focus restoration — this component only
+ * decides what the two buttons say and which one is loud.
+ */
 export function ConfirmDialog({
   open,
   title,
@@ -26,41 +31,24 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   const confirmRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (!open) return;
-    confirmRef.current?.focus();
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.stopPropagation();
-        onCancel();
-      }
-    }
-    document.addEventListener("keydown", onKeyDown, true);
-    return () => document.removeEventListener("keydown", onKeyDown, true);
-  }, [open, onCancel]);
-
-  if (!open) return null;
-
   return (
-    <div className="cg-scrim" onClick={onCancel} role="presentation">
-      <div
-        className="cg-dialog"
-        role="alertdialog"
-        aria-modal="true"
-        aria-label={typeof title === "string" ? title : undefined}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <h2 className="cg-dialog__title">{title}</h2>
-        <div className="cg-dialog__body">{children}</div>
-        <div className="cg-dialog__actions">
+    <Modal
+      open={open}
+      onClose={onCancel}
+      title={title}
+      initialFocusRef={confirmRef}
+      footer={
+        <>
           <Button variant="secondary" onClick={onCancel}>
             {cancelLabel}
           </Button>
           <Button ref={confirmRef} variant={confirmVariant} onClick={onConfirm}>
             {confirmLabel}
           </Button>
-        </div>
-      </div>
-    </div>
+        </>
+      }
+    >
+      {children}
+    </Modal>
   );
 }

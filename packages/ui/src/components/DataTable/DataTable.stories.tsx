@@ -203,10 +203,13 @@ export const Interactive: Story = {
           caption="Visitors"
         />
         <p className="sb-note">
-          Click a row to drill in (accent rail), a checkbox to select for a bulk
-          action (quieter fill), or a column header to sort. Select-all applies only
-          to visible rows — a filtered view that silently selects hidden ones is how
-          people accidentally unblock two hundred visitors.
+          Click a row to drill in (ink rail plus a tinted surface), a checkbox to
+          select it for a bulk action (quieter fill), or a column header to sort.
+          Both selected treatments draw from <code>--cg-selected-*</code>, so the
+          drilled-in row, the checkboxes and the toolbar chips all agree on what
+          &ldquo;selected&rdquo; looks like. Select-all applies only to visible rows —
+          a filtered view that silently selects hidden ones is how people
+          accidentally unblock two hundred visitors.
         </p>
       </div>
     );

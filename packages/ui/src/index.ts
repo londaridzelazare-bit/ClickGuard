@@ -14,6 +14,15 @@ import "./styles/base.css";
 export * from "./tokens";
 export { cx } from "./utils/cx";
 
+export { Icon, IconBadge, ICON_NAMES } from "./components/Icon/Icon";
+export type {
+  IconProps,
+  IconBadgeProps,
+  IconName,
+  IconSize,
+  IconTone,
+} from "./components/Icon/Icon";
+
 export { Button } from "./components/Button/Button";
 export type { ButtonProps, ButtonVariant, ButtonSize } from "./components/Button/Button";
 
@@ -67,8 +76,42 @@ export type {
 export { Drawer, DrawerCloseButton } from "./components/Drawer/Drawer";
 export type { DrawerProps } from "./components/Drawer/Drawer";
 
+export { Modal, ModalSuccess } from "./components/Modal/Modal";
+export type { ModalProps, ModalSuccessProps } from "./components/Modal/Modal";
+
 export { ConfirmDialog } from "./components/ConfirmDialog/ConfirmDialog";
 export type { ConfirmDialogProps } from "./components/ConfirmDialog/ConfirmDialog";
+
+export { TextArea } from "./components/TextArea/TextArea";
+export type { TextAreaProps } from "./components/TextArea/TextArea";
+
+export { ReportDialog } from "./components/ReportDialog/ReportDialog";
+export type { ReportDialogProps, ReportPhase } from "./components/ReportDialog/ReportDialog";
+
+export {
+  DateRangePicker,
+  DEFAULT_PRESETS,
+  presetRange,
+  matchPreset,
+} from "./components/DateRangePicker/DateRangePicker";
+export type {
+  DateRangePickerProps,
+  DateRangePreset,
+  DateRange,
+} from "./components/DateRangePicker/DateRangePicker";
+export {
+  addDays,
+  addMonths,
+  daysBetween,
+  formatDay,
+  formatDayLong,
+  formatRange,
+  isCompleteRange,
+  isSameDay,
+  isWithin,
+  rangesOverlap,
+  startOfDay,
+} from "./components/DateRangePicker/dates";
 
 export { EmptyState } from "./components/EmptyState/EmptyState";
 export type { EmptyStateProps } from "./components/EmptyState/EmptyState";

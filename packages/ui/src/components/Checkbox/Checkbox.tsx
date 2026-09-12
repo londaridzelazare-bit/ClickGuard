@@ -1,5 +1,6 @@
 import type { MouseEvent } from "react";
 import { cx } from "../../utils/cx";
+import { Icon } from "../Icon/Icon";
 import "./Checkbox.css";
 
 export interface CheckboxProps {
@@ -36,22 +37,9 @@ export function Checkbox({
       {...rest}
     >
       {indeterminate ? (
-        <span className="cg-checkbox__dash" aria-hidden="true" />
+        <Icon name="minus" size="sm" className="cg-checkbox__mark" />
       ) : checked ? (
-        <svg
-          className="cg-checkbox__mark"
-          viewBox="0 0 10 10"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M1.5 5.2 3.9 7.5 8.5 2.5"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <Icon name="check" size="sm" className="cg-checkbox__mark" />
       ) : null}
     </button>
   );

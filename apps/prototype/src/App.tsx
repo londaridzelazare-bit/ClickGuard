@@ -3,15 +3,21 @@ import {
   Button,
   ConfirmDialog,
   DataTable,
+  DateRangePicker,
+  DEFAULT_PRESETS,
   EmptyState,
   FilterChip,
   MetricCard,
+  ReportDialog,
   SearchInput,
   StatusPill,
   ThreatBar,
   ToastRegion,
   VISITOR_STATUSES,
+  isWithin,
+  presetRange,
   type DataTableColumn,
+  type DateRange,
   type SortState,
   type ToastItem,
   type VisitorStatus,
@@ -20,7 +26,7 @@ import {
 import { VisitorDetail } from "./VisitorDetail";
 import { VISITORS, derive, type Override } from "./data/visitors";
 import type { DerivedVisitor, Platform } from "./data/types";
-import { formatMoney } from "./data/format";
+import { NOW, formatMoney } from "./data/format";
 import "./app.css";
 
 /* Scenarios exist so a reviewer can reach the loading, empty and no-match
@@ -47,9 +53,16 @@ interface HistoryEntry {
 /** Stable identity so the `all` memo below doesn't churn every render. */
 const EMPTY: DerivedVisitor[] = [];
 
+/** The period the screen opens on. */
+const DEFAULT_RANGE: DateRange = presetRange(
+  DEFAULT_PRESETS.find((p) => p.id === "30d")!,
+  NOW,
+);
+
 export default function App() {
   const [scenario, setScenario] = useState<Scenario>("live");
 
+  const [dateRange, setDateRange] = useState<DateRange>(DEFAULT_RANGE);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
   const [paidOnly, setPaidOnly] = useState(false);
@@ -66,6 +79,7 @@ export default function App() {
   const [confirm, setConfirm] = useState<{ kind: "unblock"; visitor: DerivedVisitor } | null>(
     null,
   );
+  const [reporting, setReporting] = useState<DerivedVisitor | null>(null);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const history = useRef<HistoryEntry[]>([]);
 
@@ -96,7 +110,25 @@ export default function App() {
      the counts and the chips too — not just the table body. A zero table under
      a toolbar that still says "22 visitors" is the kind of detail that tells a
      customer the screen is a mock-up. */
-  const all = scenario === "empty" ? EMPTY : derived;
+  const dated = scenario === "empty" ? EMPTY : derived;
+
+  /**
+   * The date range scopes the whole screen. A visitor belongs to the period if
+   * they actually *arrived* during it — not merely if their journey straddles
+   * it. A visitor who came on Sep 1 and again on Sep 20 was not present in a
+   * Sep 5–10 window, and counting them there would inflate every metric above
+   * the table.
+   *
+   * Note this is "any visit in range", not "last seen in range": a click farm
+   * that started before the window and is still running belongs to the period,
+   * and dropping it would hide exactly the traffic the period is meant to
+   * surface.
+   */
+  const all = useMemo(() => {
+    const { start, end } = dateRange;
+    if (!start || !end) return dated;
+    return dated.filter((v) => v.visits.some((visit) => isWithin(visit.at, start, end)));
+  }, [dated, dateRange]);
 
   const query = search.trim().toLowerCase();
 
@@ -167,25 +199,32 @@ export default function App() {
     return counts;
   }, [all]);
 
+  /**
+   * Metrics describe exactly the rows on screen — the same set the table
+   * renders, after the date range, chips and search. Summarising a wider set
+   * than the one below them is how a dashboard ends up contradicting itself.
+   */
   const metrics = useMemo(() => {
-    if (all.length === 0) {
+    const scope = filtered;
+    if (scope.length === 0) {
       return {
         blocked: "0",
-        blockedSub: "Your ads are live",
+        blockedSub: all.length === 0 ? "Your ads are live" : "None in this view",
         protected: "$0.00",
-        protectedSub: "Nothing to protect yet",
+        protectedSub: all.length === 0 ? "Nothing to protect yet" : "Nothing in this view",
         flagged: "0",
         flaggedSub: "Nothing to review",
       };
     }
-    const blocked = all.filter((v) => v.status === "Blocked");
-    const flagged = all.filter((v) => v.status === "Flagged");
-    const protectedTotal = all.reduce((sum, v) => sum + v.protectedAmount, 0);
-    const stoppedTotal = all.reduce((sum, v) => sum + v.stopped, 0);
-    const leaked = all.reduce((sum, v) => sum + v.spentSince, 0);
+    const blocked = scope.filter((v) => v.status === "Blocked");
+    const flagged = scope.filter((v) => v.status === "Flagged");
+    const protectedTotal = scope.reduce((sum, v) => sum + v.protectedAmount, 0);
+    const stoppedTotal = scope.reduce((sum, v) => sum + v.stopped, 0);
+    const leaked = scope.reduce((sum, v) => sum + v.spentSince, 0);
+    const scoped = scope.length !== all.length;
     return {
       blocked: String(blocked.length),
-      blockedSub: `of ${all.length} visitors seen`,
+      blockedSub: `of ${scope.length} ${scoped ? "visitors in view" : "visitors seen"}`,
       protected: formatMoney(protectedTotal),
       protectedSub:
         leaked > 0
@@ -194,7 +233,7 @@ export default function App() {
       flagged: String(flagged.length),
       flaggedSub: flagged.length ? "Review when you have a minute" : "Nothing to review",
     };
-  }, [all]);
+  }, [filtered, all.length]);
 
   /* --- mutations -------------------------------------------------------- */
 
@@ -265,12 +304,18 @@ export default function App() {
     [applyOverrides, overrides],
   );
 
-  const reportMistake = useCallback(
-    (visitor: DerivedVisitor) => {
+  /** The report is attached to the visitor whose drawer raised it. */
+  const submitReport = useCallback(
+    (visitor: DerivedVisitor, reason: string) => {
       pushToast({
         tone: "success",
-        message: `Thanks — we'll review the decision on ${visitor.ip} and use it to tune your account.`,
+        message: reason
+          ? `Report sent for ${visitor.ip}, with your note.`
+          : `Report sent for ${visitor.ip}.`,
       });
+      // A real build would POST { ip, status, reason } here.
+      // eslint-disable-next-line no-console
+      console.info("[report]", { ip: visitor.ip, status: visitor.status, reason });
     },
     [pushToast],
   );
@@ -474,11 +519,15 @@ export default function App() {
         compact
         title="No visitors match these filters"
         description={
-          query
-            ? `Nothing matches "${search.trim()}" with the current status and platform filters. Try a shorter search, or clear the filters.`
-            : "No visitors match this combination of status and platform filters."
+          all.length === 0
+            ? "No visitors arrived in this period. Widen the date range to look further back."
+            : query
+              ? `Nothing matches "${search.trim()}" with the current status and platform filters. Try a shorter search, or clear the filters.`
+              : "No visitors match this combination of status and platform filters."
         }
-        action={<Button onClick={clearFilters}>Clear filters</Button>}
+        action={
+          all.length === 0 ? undefined : <Button onClick={clearFilters}>Clear filters</Button>
+        }
       />
     );
 
@@ -528,7 +577,12 @@ export default function App() {
               <span className="freshness__dot" aria-hidden="true" />
               Synced 4 min ago
             </span>
-            <Button>Last 30 days · Aug 13 – Sep 12, 2026 ▾</Button>
+            <DateRangePicker
+              value={dateRange}
+              onChange={setDateRange}
+              today={NOW}
+              align="end"
+            />
           </div>
         </div>
 
@@ -537,17 +591,23 @@ export default function App() {
             label="Blocked visitors"
             value={metrics.blocked}
             sub={metrics.blockedSub}
+            icon="shieldBlock"
+            iconTone="danger"
           />
           <MetricCard
             label="Spend protected"
             value={metrics.protected}
             sub={metrics.protectedSub}
             valueTone="success"
+            icon="shieldCheck"
+            iconTone="success"
           />
           <MetricCard
             label="Flagged, not yet blocked"
             value={metrics.flagged}
             sub={metrics.flaggedSub}
+            icon="flag"
+            iconTone="warning"
           />
         </div>
 
@@ -643,14 +703,14 @@ export default function App() {
           // The drawer stays open behind the scrim: the customer is confirming
           // a decision about *this* visitor, and taking the evidence away at
           // the moment of commitment is the opposite of what we want.
-          closeOnEscape={!confirm}
+          closeOnEscape={!confirm && !reporting}
           onClose={() => setSelectedIp(null)}
           expandedRuns={expandedRuns}
           onExpandRun={(key) => setExpandedRuns((current) => ({ ...current, [key]: true }))}
           onUnblock={(v) => setConfirm({ kind: "unblock", visitor: v })}
           onBlock={blockVisitor}
           onMarkSafe={markSafe}
-          onReportMistake={reportMistake}
+          onReportMistake={setReporting}
           onRetrySync={retrySync}
         />
       </div>
@@ -676,6 +736,16 @@ export default function App() {
         flag it if the pattern comes back, but we won&rsquo;t block it again unless you
         ask.
       </ConfirmDialog>
+
+      <ReportDialog
+        open={Boolean(reporting)}
+        subject={reporting?.ip ?? ""}
+        subjectLabel={`${reporting?.status ?? ""} · ${reporting?.threatLabel ?? ""}`}
+        onSubmit={(reason) => {
+          if (reporting) submitReport(reporting, reason);
+        }}
+        onClose={() => setReporting(null)}
+      />
 
       <ToastRegion
         toasts={toasts}

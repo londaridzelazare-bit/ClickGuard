@@ -22,8 +22,23 @@
   border-color: var(--cg-border);
 }
 
+/* Label left, icon badge right. The badge sits on the label's baseline row
+   rather than above the value, so the number stays the loudest thing. */
+.cg-metric__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--cg-space-12);
+  min-height: var(--cg-icon-badge);
+}
+
+.cg-metric--drawer .cg-metric__head {
+  min-height: 0;
+}
+
 .cg-metric__label {
   color: var(--cg-text-secondary);
+  min-width: 0;
 }
 .cg-metric--page .cg-metric__label { font-size: var(--cg-text-13); }
 .cg-metric--drawer .cg-metric__label { font-size: var(--cg-text-12); }

@@ -1,0 +1,260 @@
+.cg-drp {
+  position: relative;
+  display: inline-block;
+}
+
+.cg-drp__trigger-label {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- popover ------------------------------------------------------------ */
+
+.cg-drp__panel {
+  position: absolute;
+  top: calc(100% + var(--cg-space-8));
+  z-index: 60;
+  background: var(--cg-surface-0);
+  border: 1px solid var(--cg-border);
+  border-radius: var(--cg-radius-lg);
+  box-shadow: var(--cg-shadow-dialog);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cg-drp__panel--end { right: 0; }
+.cg-drp__panel--start { left: 0; }
+
+.cg-drp__body {
+  display: flex;
+  align-items: stretch;
+}
+
+/* --- presets ------------------------------------------------------------ */
+
+.cg-drp__presets {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cg-space-2);
+  padding: var(--cg-space-12);
+  border-right: 1px solid var(--cg-border);
+  width: 152px;
+  flex: none;
+}
+
+.cg-drp__preset {
+  font: inherit;
+  font-size: var(--cg-text-13);
+  text-align: left;
+  padding: var(--cg-space-6) var(--cg-space-10);
+  border-radius: var(--cg-radius-md);
+  border: 1px solid transparent;
+  background: none;
+  color: var(--cg-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cg-drp__preset:hover { background: var(--cg-surface-2); color: var(--cg-text-primary); }
+
+.cg-drp__preset:focus-visible {
+  outline: none;
+  box-shadow: var(--cg-focus-ring);
+}
+
+.cg-drp__preset[aria-pressed="true"] {
+  background: var(--cg-selected-fill);
+  border-color: var(--cg-selected-border);
+  color: var(--cg-selected-on-fill);
+  font-weight: var(--cg-weight-medium);
+}
+
+.cg-drp__preset[aria-pressed="true"]:hover {
+  background: var(--cg-text-secondary);
+  color: var(--cg-selected-on-fill);
+}
+
+/* --- calendars ---------------------------------------------------------- */
+
+.cg-drp__calendars {
+  display: flex;
+  gap: var(--cg-space-24);
+  padding: var(--cg-space-12) var(--cg-space-16) var(--cg-space-16);
+}
+
+.cg-drp__month { width: 224px; }
+
+.cg-drp__month-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cg-space-8);
+  height: 28px;
+  margin-bottom: var(--cg-space-6);
+}
+
+.cg-drp__month-title {
+  font-size: var(--cg-text-13);
+  font-weight: var(--cg-weight-medium);
+  color: var(--cg-text-primary);
+  text-align: center;
+  flex: 1;
+}
+
+.cg-drp__nav {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--cg-radius-md);
+  border: 1px solid var(--cg-border);
+  background: var(--cg-surface-0);
+  color: var(--cg-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  padding: 0;
+}
+
+.cg-drp__nav:hover:not(:disabled) {
+  background: var(--cg-surface-2);
+  color: var(--cg-text-primary);
+}
+
+.cg-drp__nav:focus-visible {
+  outline: none;
+  box-shadow: var(--cg-focus-ring);
+}
+
+.cg-drp__nav:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.cg-drp__nav--hidden { visibility: hidden; }
+
+.cg-drp__weekdays,
+.cg-drp__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.cg-drp__weekday {
+  font-size: var(--cg-text-11);
+  color: var(--cg-text-muted);
+  text-align: center;
+  height: 24px;
+  line-height: 24px;
+}
+
+/* Each cell is its own row segment so the range highlight can run edge to
+   edge between days without gaps. */
+.cg-drp__cell {
+  position: relative;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The continuous band behind days inside the range. */
+.cg-drp__cell--in-range::before,
+.cg-drp__cell--edge::before {
+  content: "";
+  position: absolute;
+  inset: 2px 0;
+  background: var(--cg-selected-surface);
+}
+
+.cg-drp__cell--preview::before {
+  background: var(--cg-surface-2);
+}
+
+/* Round the band at the endpoints. */
+.cg-drp__cell--start::before { left: 3px; border-radius: var(--cg-radius-pill) 0 0 var(--cg-radius-pill); }
+.cg-drp__cell--end::before { right: 3px; border-radius: 0 var(--cg-radius-pill) var(--cg-radius-pill) 0; }
+.cg-drp__cell--single::before { display: none; }
+
+.cg-drp__day {
+  position: relative;
+  z-index: 1;
+  font: inherit;
+  font-size: var(--cg-text-12);
+  font-variant-numeric: tabular-nums;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--cg-text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cg-drp__day:hover:not(:disabled) {
+  background: var(--cg-surface-3);
+}
+
+.cg-drp__day:focus-visible {
+  outline: none;
+  box-shadow: var(--cg-focus-ring);
+}
+
+/* Days spilling in from the neighbouring month stay visible but recede, so
+   the month's own shape is still readable at a glance. */
+.cg-drp__day--outside { color: var(--cg-text-muted); }
+
+.cg-drp__day--today {
+  border-color: var(--cg-border-strong);
+  font-weight: var(--cg-weight-medium);
+}
+
+/* Endpoints are solid ink — the same "you picked this" as a checked
+   checkbox or an active filter chip. */
+.cg-drp__day--selected,
+.cg-drp__day--selected:hover:not(:disabled) {
+  background: var(--cg-selected-fill);
+  border-color: var(--cg-selected-border);
+  color: var(--cg-selected-on-fill);
+  font-weight: var(--cg-weight-medium);
+}
+
+.cg-drp__day:disabled {
+  color: var(--cg-text-muted);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --- footer ------------------------------------------------------------- */
+
+.cg-drp__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-8);
+  padding: var(--cg-space-12) var(--cg-space-16);
+  border-top: 1px solid var(--cg-border);
+  background: var(--cg-surface-1);
+  border-radius: 0 0 var(--cg-radius-lg) var(--cg-radius-lg);
+}
+
+.cg-drp__summary {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-secondary);
+  font-variant-numeric: tabular-nums;
+  margin-right: auto;
+  min-width: 0;
+}
+
+.cg-drp__summary strong {
+  font-weight: var(--cg-weight-medium);
+  color: var(--cg-text-primary);
+}
+
+/* Shown while only one endpoint is chosen — the state that would otherwise
+   leave the user staring at a disabled Apply with no explanation. */
+.cg-drp__summary--pending { color: var(--cg-warning-text); }
+
+@media (max-width: 900px) {
+  .cg-drp__calendars { flex-direction: column; gap: var(--cg-space-16); }
+  .cg-drp__presets { width: 130px; }
+}

@@ -11,9 +11,29 @@
   transition: border-color var(--cg-duration-fast) var(--cg-ease);
 }
 
+.cg-search:hover:not(:focus-within) {
+  border-color: var(--cg-text-secondary);
+  background: var(--cg-surface-1);
+}
+
+/* One black outline and nothing else.
+   Previously this set `border-color` AND a two-layer `box-shadow` ring, so
+   focus produced three concentric lines. The outline is drawn at a negative
+   offset so it lands exactly on top of the 1px border instead of outside it —
+   that is what keeps it a single crisp line rather than a ring around a
+   border. `box-shadow: none` defends against the base-layer ring. */
 .cg-search:focus-within {
-  border-color: var(--cg-accent-fill);
-  box-shadow: var(--cg-focus-ring);
+  outline: var(--cg-focus-width) solid var(--cg-focus-color);
+  outline-offset: var(--cg-focus-inset-offset);
+  box-shadow: none;
+  background: var(--cg-surface-0);
+}
+
+/* The inner input never draws its own indicator — the wrapper owns focus. */
+.cg-search__input:focus,
+.cg-search__input:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .cg-search__icon {
@@ -37,6 +57,15 @@
 
 .cg-search__input::placeholder {
   color: var(--cg-text-muted);
+}
+
+/* WebKit adds its own clear affordance to type="search". We render our own,
+   and two clear buttons in one field is exactly the kind of doubling this
+   component is meant to avoid. */
+.cg-search__input::-webkit-search-cancel-button,
+.cg-search__input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .cg-search__clear {

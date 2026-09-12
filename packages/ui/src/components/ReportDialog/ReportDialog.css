@@ -1,0 +1,39 @@
+/* Shows what is being reported, so the user can see they picked the right
+   row before they send anything. A report attached to the wrong visitor is
+   worse than no report at all. */
+.cg-report__subject {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-8);
+  padding: var(--cg-space-10) var(--cg-space-12);
+  border: 1px solid var(--cg-border);
+  border-radius: var(--cg-radius-md);
+  background: var(--cg-surface-1);
+  margin-bottom: var(--cg-space-16);
+}
+
+.cg-report__subject-label {
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+}
+
+.cg-report__subject-value {
+  font-family: var(--cg-font-mono);
+  font-size: var(--cg-text-13);
+  color: var(--cg-text-primary);
+  margin-left: auto;
+}
+
+.cg-report__intro {
+  margin: 0 0 var(--cg-space-16);
+  font-size: var(--cg-text-13);
+  color: var(--cg-text-secondary);
+  line-height: var(--cg-leading-relaxed);
+  text-wrap: pretty;
+}
+
+.cg-report__note {
+  margin-right: auto;
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-muted);
+}

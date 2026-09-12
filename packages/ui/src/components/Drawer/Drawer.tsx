@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cx } from "../../utils/cx";
+import { Icon } from "../Icon/Icon";
 import "./Drawer.css";
 
 export interface DrawerProps {
@@ -68,9 +69,7 @@ export interface DrawerCloseButtonProps {
 export function DrawerCloseButton({ onClick }: DrawerCloseButtonProps) {
   return (
     <button type="button" className="cg-drawer__close" aria-label="Close panel" onClick={onClick}>
-      <svg viewBox="0 0 12 12" width="11" height="11" fill="none" aria-hidden="true">
-        <path d="M2.5 2.5 9.5 9.5M9.5 2.5 2.5 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
+      <Icon name="close" size="sm" />
     </button>
   );
 }

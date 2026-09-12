@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cx } from "../../utils/cx";
+import { Icon } from "../Icon/Icon";
 import "./EmptyState.css";
 
 export interface EmptyStateProps {
@@ -30,21 +31,7 @@ export function EmptyState({
     <div className={cx("cg-empty", compact && "cg-empty--compact", className)}>
       {icon !== "none" && (
         <span className={cx("cg-empty__icon", `cg-empty__icon--${icon}`)} aria-hidden="true">
-          {icon === "success" ? (
-            <svg viewBox="0 0 14 14" width="13" height="13" fill="none">
-              <path
-                d="M2.5 7.2 5.6 10 11.5 3.8"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 14 14" width="13" height="13" fill="none">
-              <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.4" />
-            </svg>
-          )}
+          <Icon name={icon === "success" ? "check" : "circle"} size="md" />
         </span>
       )}
       <h3 className="cg-empty__title">{title}</h3>

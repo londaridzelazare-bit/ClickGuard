@@ -363,7 +363,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Normal behavior",
     pattern: "POOPOO",
     scores: [6, 4, 4, 10, 4, 2],
-    ago: 30240,
+    ago: 93600,
     step: 5760,
     device: "Safari 17 on iPhone · Comcast",
     sentence:
@@ -422,7 +422,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Automation markers",
     pattern: "PPP",
     scores: [40, 58, 82],
-    ago: 8640,
+    ago: 28860,
     step: 25,
     crossAt: 3,
     platforms: ["Google Ads"],
@@ -492,7 +492,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Shared device fingerprint",
     pattern: "POOPOOPOOPOO",
     scores: risingScores(12, 0, 61, 20, 0),
-    ago: 12960,
+    ago: 68600,
     step: 1000,
     device: "Chrome 129 on Windows · Mullvad VPN · fingerprint seen on 2 other IPs",
     sentence:
@@ -520,7 +520,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Normal behavior",
     pattern: "OOOO",
     scores: [4, 4, 2, 2],
-    ago: 8640,
+    ago: 87840,
     step: 2000,
     device: "Chrome 129 on macOS · Comcast",
     sentence:
@@ -586,7 +586,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Verified search crawler",
     pattern: "OOOOOO",
     scores: [2, 2, 2, 2, 2, 2],
-    ago: 14400,
+    ago: 112800,
     step: 2400,
     device: "Googlebot/2.1 · reverse DNS confirms google.com",
     sentence:
@@ -652,7 +652,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Only ever reads pricing",
     pattern: "POPOPO",
     scores: [18, 22, 38, 42, 56, 60],
-    ago: 20160,
+    ago: 88000,
     step: 3200,
     device: "Chrome 129 on macOS · corporate VPN, ASN registered to a dental group",
     sentence:
@@ -772,7 +772,7 @@ export const VISITORS: Visitor[] = [
     threatLabel: "Normal behavior",
     pattern: "OPOO",
     scores: [2, 10, 6, 4],
-    ago: 19000,
+    ago: 99840,
     step: 4200,
     device: "Edge 129 on Windows · Cox Communications",
     sentence:
