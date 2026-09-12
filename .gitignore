@@ -3,6 +3,9 @@ dist/
 storybook-static/
 _site/
 .gh-pages-worktree/
+
+# Generated from DESIGN-RATIONALE.md; the markdown is the source of truth.
+ClickGuard-Design-Rationale.pdf
 *.log
 .DS_Store
 .vercel
