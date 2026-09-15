@@ -10,7 +10,7 @@ const meta: Meta<typeof JourneyTimeline> = {
     docs: {
       description: {
         component:
-          "Every arrival by this visitor, as a score bar against a fixed block threshold. This is the component that makes the product's core mechanic visible: blocking is **cumulative across the journey**, not a judgement on any one visit. Paid below the line is amber, paid at or over is red, organic is always grey — because an organic visit can raise suspicion but never costs the advertiser money.",
+          "Every arrival by this visitor, as a score bar against a fixed block threshold. This is the component that makes the product's core mechanic visible: blocking is **cumulative across the journey**, not a judgement on any one visit. Paid below the line is amber, paid at or over is red, organic is always grey — because an organic visit can raise suspicion but never costs the advertiser money.\n\nVisits are **newest first** by default: a customer opens a visitor asking what it is doing now. Callers always pass items oldest → newest and the component decides display order, so data never has to know about presentation.",
       },
     },
   },
@@ -30,6 +30,23 @@ export const BlockedVisitor: Story = {
   args: {
     items: shortJourney,
     summary: "5 visits · 4 paid · blocks at 70",
+  },
+};
+
+export const OldestFirst: Story = {
+  name: "Oldest first",
+  args: {
+    items: shortJourney,
+    order: "oldest-first",
+    summary: "5 visits · 4 paid · blocks at 70",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The same journey in chronological order. Useful where the story of how suspicion built up matters more than the current state — an audit export, say. The header pill always states the order, because a reader assumes a timeline starts at the top.",
+      },
+    },
   },
 };
 

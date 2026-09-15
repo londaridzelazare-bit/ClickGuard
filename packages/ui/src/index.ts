@@ -58,6 +58,7 @@ export type { VerdictBoxProps } from "./components/VerdictBox/VerdictBox";
 export { JourneyTimeline } from "./components/JourneyTimeline/JourneyTimeline";
 export type {
   JourneyTimelineProps,
+  JourneyOrder,
   JourneyItem,
   JourneyVisit,
   JourneyGap,

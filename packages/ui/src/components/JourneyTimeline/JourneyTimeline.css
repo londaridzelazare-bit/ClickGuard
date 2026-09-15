@@ -20,6 +20,18 @@
   margin: 0;
 }
 
+/* Timelines conventionally run oldest to newest, so a reversed one has to
+   say so — otherwise the reader assumes the top row is where it began. */
+.cg-journey__order {
+  font-size: var(--cg-text-11);
+  color: var(--cg-text-muted);
+  border: 1px solid var(--cg-border);
+  border-radius: var(--cg-radius-pill);
+  padding: 0 var(--cg-space-6);
+  line-height: var(--cg-leading-normal);
+  white-space: nowrap;
+}
+
 .cg-journey__summary {
   margin-left: auto;
   font-size: var(--cg-text-12);

@@ -27,10 +27,20 @@ export interface JourneyGap {
 
 export type JourneyItem = JourneyVisit | JourneyGap;
 
+export type JourneyOrder = "newest-first" | "oldest-first";
+
 export interface JourneyTimelineProps {
+  /** Always supplied oldest → newest; the component decides display order. */
   items: JourneyItem[];
   /** 0–100. Drawn as a dashed vertical line across every bar. */
   threshold?: number;
+  /**
+   * Newest first by default: the question a customer opens a visitor with is
+   * "what is it doing now?", so the latest arrival belongs at the top. The
+   * running score then reads downward from where the visitor stands today to
+   * how it started.
+   */
+  order?: JourneyOrder;
   title?: ReactNode;
   summary?: ReactNode;
   className?: string;
@@ -39,14 +49,22 @@ export interface JourneyTimelineProps {
 export function JourneyTimeline({
   items,
   threshold = BLOCK_THRESHOLD,
+  order = "newest-first",
   title = "Journey",
   summary,
   className,
 }: JourneyTimelineProps) {
+  // Callers pass chronological order so data never has to know about display.
+  // Collapsed runs are items in the same sequence, so they stay in place.
+  const ordered = order === "newest-first" ? [...items].reverse() : items;
+
   return (
     <div className={cx("cg-journey", className)}>
       <div className="cg-journey__header">
         <h3 className="cg-journey__title">{title}</h3>
+        <span className="cg-journey__order">
+          {order === "newest-first" ? "Newest first" : "Oldest first"}
+        </span>
         {summary && <span className="cg-journey__summary">{summary}</span>}
       </div>
 
@@ -60,7 +78,7 @@ export function JourneyTimeline({
       </div>
 
       <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
-        {items.map((item) =>
+        {ordered.map((item) =>
           item.kind === "gap" ? (
             <li key={item.id}>
               <button type="button" className="cg-journey__gap" onClick={item.onExpand}>
