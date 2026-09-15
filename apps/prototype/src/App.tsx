@@ -8,6 +8,7 @@ import {
   EmptyState,
   FilterChip,
   MetricCard,
+  Pagination,
   ReportDialog,
   SearchInput,
   StatusPill,
@@ -53,6 +54,8 @@ interface HistoryEntry {
 /** Stable identity so the `all` memo below doesn't churn every render. */
 const EMPTY: DerivedVisitor[] = [];
 
+const PAGE_SIZES = [10, 25, 50];
+
 /** The period the screen opens on. */
 const DEFAULT_RANGE: DateRange = presetRange(
   DEFAULT_PRESETS.find((p) => p.id === "30d")!,
@@ -72,6 +75,8 @@ export default function App() {
   });
 
   const [sort, setSort] = useState<SortState>({ key: "lastSeen", dir: "desc" });
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
   const [selectedIp, setSelectedIp] = useState<string | null>(null);
   const [checkedKeys, setCheckedKeys] = useState<string[]>([]);
   const [overrides, setOverrides] = useState<Record<string, Override>>({});
@@ -181,6 +186,27 @@ export default function App() {
       return sort.dir === "asc" ? cmp : -cmp;
     });
   }, [all, statusFilter, paidOnly, platformFilter, query, sort]);
+
+  /* Any change to what the list contains or how it is ordered starts again
+     from page 1 — staying on page 3 of a result set that now has one page
+     would show an empty table for no visible reason. */
+  useEffect(() => {
+    setPage(1);
+  }, [scenario, dateRange, statusFilter, paidOnly, platformFilter, query, sort, pageSize]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
+
+  /* An action can shrink the list under the current page — unblocking the
+     last Blocked visitor while filtered to Blocked, say. Step back rather
+     than strand the user on a page that no longer exists. */
+  useEffect(() => {
+    if (page > pageCount) setPage(pageCount);
+  }, [page, pageCount]);
+
+  const pageRows = useMemo(
+    () => filtered.slice((page - 1) * pageSize, page * pageSize),
+    [filtered, page, pageSize],
+  );
 
   const selected = selectedIp ? (all.find((v) => v.ip === selectedIp) ?? null) : null;
 
@@ -386,11 +412,15 @@ export default function App() {
       if (index === -1) return;
       const nextIndex = event.key === "ArrowDown" ? index + 1 : index - 1;
       const next = filtered[nextIndex];
-      if (next) setSelectedIp(next.ip);
+      if (!next) return;
+      setSelectedIp(next.ip);
+      // Walking off the end of a page turns the page, so the row whose detail
+      // is open is always one you can see in the table.
+      setPage(Math.floor(nextIndex / pageSize) + 1);
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [selectedIp, filtered]);
+  }, [selectedIp, filtered, pageSize]);
 
   /* --- columns ----------------------------------------------------------- */
 
@@ -680,9 +710,25 @@ export default function App() {
         </div>
 
         <DataTable
+          className="page__table"
           caption="Visitors scored by ClickGuard"
           columns={columns}
-          rows={filtered}
+          rows={pageRows}
+          scrollable
+          scrollResetKey={`${page}-${pageSize}`}
+          footer={
+            !loading && filtered.length > 0 ? (
+              <Pagination
+                page={page}
+                pageSize={pageSize}
+                total={filtered.length}
+                onPageChange={setPage}
+                pageSizeOptions={PAGE_SIZES}
+                onPageSizeChange={setPageSize}
+                itemLabel="visitors"
+              />
+            ) : undefined
+          }
           rowKey={(v) => v.ip}
           sort={sort}
           onSortChange={toggleSort}

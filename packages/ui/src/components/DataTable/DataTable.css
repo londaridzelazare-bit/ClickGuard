@@ -5,8 +5,39 @@
   overflow: hidden;
 }
 
-.cg-table__scroll {
-  overflow-x: auto;
+/* --- scrolling body ---------------------------------------------------
+   Header and footer stay fixed; only the rows scroll. The table fills the
+   height its parent gives it, and `min-height: 0` lets the body shrink below
+   its content instead of pushing the footer out of view. */
+.cg-table--scroll {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cg-table--scroll > .cg-table__head,
+.cg-table--scroll > .cg-table__footer {
+  flex: none;
+}
+
+.cg-table--scroll > .cg-table__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+/* Reserve the same gutter in the header, so columns line up with the rows
+   below whether or not a scrollbar is showing. */
+.cg-table--scroll > .cg-table__head {
+  scrollbar-gutter: stable;
+  overflow-y: hidden;
+}
+
+.cg-table__body:focus-visible {
+  outline: var(--cg-focus-width) solid var(--cg-focus-color);
+  outline-offset: calc(var(--cg-focus-width) * -1);
 }
 
 .cg-table__grid {

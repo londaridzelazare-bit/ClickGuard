@@ -5,6 +5,7 @@ import { StatusPill } from "../StatusPill/StatusPill";
 import { ThreatBar } from "../ThreatBar/ThreatBar";
 import { EmptyState } from "../EmptyState/EmptyState";
 import { Button } from "../Button/Button";
+import { Pagination } from "../Pagination/Pagination";
 import type { VisitorStatus } from "../../tokens";
 
 interface Row {
@@ -210,6 +211,70 @@ export const Interactive: Story = {
           &ldquo;selected&rdquo; looks like. Select-all applies only to visible rows —
           a filtered view that silently selects hidden ones is how people
           accidentally unblock two hundred visitors.
+        </p>
+      </div>
+    );
+  },
+};
+
+export const ScrollingWithPagination: Story = {
+  name: "Scrolling body with pagination",
+  render: () => {
+    // Enough rows to need both: 10 per page overflows the fixed-height frame,
+    // and 37 rows spans four pages.
+    const many: Row[] = Array.from({ length: 37 }, (_, i) => {
+      const base = ROWS[i % ROWS.length];
+      return { ...base, ip: `${base.ip.split(".").slice(0, 3).join(".")}.${(i * 7) % 250}` };
+    });
+    const [page, setPage] = useState(1);
+    const [size, setSize] = useState(10);
+    const [active, setActive] = useState<string | null>(null);
+    const [checked, setChecked] = useState<string[]>([]);
+    const pageRows = many.slice((page - 1) * size, page * size);
+
+    return (
+      <div className="sb-stack" style={{ maxWidth: "none" }}>
+        <div style={{ height: 460, display: "flex", flexDirection: "column" }}>
+          <DataTable
+            columns={columns}
+            rows={pageRows}
+            rowKey={(r) => r.ip}
+            selectable
+            checkedKeys={checked}
+            onCheckedChange={setChecked}
+            activeKey={active}
+            onRowActivate={(r) => setActive((a) => (a === r.ip ? null : r.ip))}
+            scrollable
+            scrollResetKey={`${page}-${size}`}
+            style={{ flex: 1 }}
+            footer={
+              <Pagination
+                page={page}
+                pageSize={size}
+                total={many.length}
+                onPageChange={setPage}
+                pageSizeOptions={[10, 25, 50]}
+                onPageSizeChange={(n) => {
+                  setSize(n);
+                  setPage(1);
+                }}
+                itemLabel="visitors"
+              />
+            }
+          />
+        </div>
+        <p className="sb-note">
+          With <code>scrollable</code>, the header and footer stay fixed and only the
+          rows scroll, so column labels and page controls never leave the screen. The
+          table fills the height its parent gives it — here a 460px frame; in the
+          prototype, whatever is left below the toolbar. Changing page returns the body
+          to the top, and the active row is scrolled into view when it changes.
+        </p>
+        <p className="sb-note">
+          The table must be allowed to <em>fill</em> its space but not <em>shrink</em>{" "}
+          below it. In a flex column, items shrink by default — which is exactly the bug
+          that once squashed this table in the prototype and clipped rows with nothing
+          left to scroll.
         </p>
       </div>
     );

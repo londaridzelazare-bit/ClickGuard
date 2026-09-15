@@ -1,4 +1,12 @@
-import { Fragment, type CSSProperties, type Dispatch, type ReactNode, type SetStateAction } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from "react";
 import { cx } from "../../utils/cx";
 import { Checkbox } from "../Checkbox/Checkbox";
 import "./DataTable.css";
@@ -42,7 +50,7 @@ export interface DataTableProps<T> {
    */
   onCheckedChange?: Dispatch<SetStateAction<string[]>>;
 
-  /** The row currently drilled into. Gets the accent rail. */
+  /** The row currently drilled into. Gets the selection rail. */
   activeKey?: string | null;
   onRowActivate?(row: T): void;
 
@@ -51,7 +59,20 @@ export interface DataTableProps<T> {
 
   /** Shown instead of rows when `rows` is empty and not loading. */
   empty?: ReactNode;
+  /** Pinned below the body — where `Pagination` goes. */
   footer?: ReactNode;
+
+  /**
+   * Gives the table its own scrolling body: the header and footer stay put
+   * and only the rows move. The table then fills whatever height its parent
+   * gives it, so the parent must size it (flex, grid or an explicit height).
+   */
+  scrollable?: boolean;
+  /**
+   * Change this value to return the body to the top — typically the current
+   * page number, so a new page never opens scrolled halfway down.
+   */
+  scrollResetKey?: string | number;
 
   caption?: string;
   className?: string;
@@ -73,10 +94,29 @@ export function DataTable<T>({
   skeletonRows = 8,
   empty,
   footer,
+  scrollable = false,
+  scrollResetKey,
   caption,
   className,
   style,
 }: DataTableProps<T>) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }, [scrollResetKey]);
+
+  /* Keep the drilled-in row in view. Arrow-key navigation moves the active
+     row, and in a scrolling body it would otherwise slide out of sight while
+     its detail stays open beside it. */
+  useEffect(() => {
+    if (!activeKey || !bodyRef.current) return;
+    const row = bodyRef.current.querySelector<HTMLElement>(
+      `[data-row-key="${CSS.escape(activeKey)}"]`,
+    );
+    row?.scrollIntoView({ block: "nearest" });
+  }, [activeKey, rows]);
+
   const template = [selectable ? "40px" : null, ...columns.map((c) => c.width)]
     .filter(Boolean)
     .join(" ");
@@ -105,7 +145,7 @@ export function DataTable<T>({
   const showEmpty = !loading && rows.length === 0;
 
   return (
-    <div className={cx("cg-table", className)} style={style}>
+    <div className={cx("cg-table", scrollable && "cg-table--scroll", className)} style={style}>
       {caption && <div className="cg-sr-only">{caption}</div>}
 
       <div className="cg-table__grid cg-table__head" style={{ gridTemplateColumns: template }}>
@@ -154,6 +194,7 @@ export function DataTable<T>({
         })}
       </div>
 
+      <div className="cg-table__body" ref={bodyRef}>
       {loading &&
         Array.from({ length: skeletonRows }).map((_, i) => (
           <div
@@ -227,6 +268,8 @@ export function DataTable<T>({
         })}
 
       {showEmpty && empty}
+      </div>
+
       {footer && <div className="cg-table__footer">{footer}</div>}
     </div>
   );

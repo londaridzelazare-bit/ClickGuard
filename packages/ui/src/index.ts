@@ -52,6 +52,9 @@ export type {
   SortDirection,
 } from "./components/DataTable/DataTable";
 
+export { Pagination, pageTokens } from "./components/Pagination/Pagination";
+export type { PaginationProps } from "./components/Pagination/Pagination";
+
 export { VerdictBox } from "./components/VerdictBox/VerdictBox";
 export type { VerdictBoxProps } from "./components/VerdictBox/VerdictBox";
 

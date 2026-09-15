@@ -146,6 +146,20 @@ body {
   gap: var(--cg-space-20);
 }
 
+/* Nothing above the table may shrink. `.page` is a fixed-height flex column,
+   and flex items shrink by default — which is how the table used to get
+   squashed below its own content, clipping rows with nothing left to scroll. */
+.page > * {
+  flex-shrink: 0;
+}
+
+/* The table takes whatever height is left and scrolls its own rows. On a
+   short window the floor keeps it usable and the page scrolls instead. */
+.page > .page__table {
+  flex: 1 1 0;
+  min-height: 380px;
+}
+
 .page__head {
   display: flex;
   align-items: flex-end;

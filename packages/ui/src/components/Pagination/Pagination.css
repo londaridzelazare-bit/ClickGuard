@@ -1,0 +1,119 @@
+.cg-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--cg-space-16);
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-secondary);
+}
+
+.cg-pagination__range {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cg-pagination__range b {
+  font-weight: var(--cg-weight-medium);
+  color: var(--cg-text-primary);
+}
+
+.cg-pagination__size {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cg-space-6);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.cg-pagination__select {
+  font-family: var(--cg-font-sans);
+  font-size: var(--cg-text-12);
+  color: var(--cg-text-primary);
+  background: var(--cg-surface-0);
+  border: 1px solid var(--cg-border-strong);
+  border-radius: var(--cg-radius-sm);
+  padding: var(--cg-space-2) var(--cg-space-6);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.cg-pagination__select:hover { border-color: var(--cg-text-secondary); }
+
+.cg-pagination__select:focus-visible {
+  outline: var(--cg-focus-width) solid var(--cg-focus-color);
+  outline-offset: var(--cg-focus-inset-offset);
+}
+
+.cg-pagination__pages {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cg-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cg-pagination__btn {
+  font-family: var(--cg-font-sans);
+  font-size: var(--cg-text-12);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--cg-space-6);
+  border-radius: var(--cg-radius-md);
+  border: 1px solid transparent;
+  background: none;
+  color: var(--cg-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--cg-duration-fast) var(--cg-ease),
+    color var(--cg-duration-fast) var(--cg-ease);
+}
+
+.cg-pagination__btn:hover:not(:disabled):not([aria-current="page"]) {
+  background: var(--cg-surface-2);
+  color: var(--cg-text-primary);
+}
+
+.cg-pagination__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--cg-focus-ring);
+}
+
+/* The current page is a selection, so it uses the one selection treatment
+   the rest of the system uses — solid ink, like a checked checkbox. */
+.cg-pagination__btn[aria-current="page"] {
+  background: var(--cg-selected-fill);
+  border-color: var(--cg-selected-border);
+  color: var(--cg-selected-on-fill);
+  font-weight: var(--cg-weight-medium);
+  cursor: default;
+}
+
+.cg-pagination__btn--step {
+  border-color: var(--cg-border);
+  background: var(--cg-surface-0);
+}
+
+.cg-pagination__btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Without a rows-per-page control, the page buttons take the right edge. */
+.cg-pagination__pages--end { margin-left: auto; }
+
+.cg-pagination__gap {
+  min-width: 20px;
+  text-align: center;
+  color: var(--cg-text-muted);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 640px) {
+  .cg-pagination__size { margin-left: 0; }
+}
