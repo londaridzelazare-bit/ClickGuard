@@ -50,7 +50,7 @@ export const PartialFailure: Story = {
     docs: {
       description: {
         story:
-          "The realistic failure: an expired Meta access token. Google is blocking, Meta is not, and the customer is still paying for Meta clicks. Hiding this would be the single fastest way to lose their trust the first time they check their own ad spend.",
+          "The realistic failure: an expired Meta access token. Google is blocking, Meta is not, and the customer is still paying for Meta clicks. Hiding this would be the single fastest way to lose their trust the first time they check their own ad spend.\n\nRecovery is a real button, not a text link: a failed sync is the most urgent thing in the panel, and a link reads like a footnote. It appears on any failed row that supplies `onRetry`; rows that are synced, pending or removed stay compact.",
       },
     },
   },

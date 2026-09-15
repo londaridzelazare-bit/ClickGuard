@@ -25,6 +25,8 @@ export const ICON_PATHS = {
     "M2.6 4.6h10.8v9H2.6v-9Z M2.6 7.2h10.8 M5.4 2.2v2.6 M10.6 2.2v2.6",
   /** Neutral placeholder for empty states. */
   circle: "M8 13.4A5.4 5.4 0 1 0 8 2.6a5.4 5.4 0 0 0 0 10.8Z",
+  /** Retry / refresh — a circular arrow. Used to re-send a failed sync. */
+  refresh: "M13 8.4A5 5 0 1 1 11.5 4.4 M12.1 1.9v2.9H9.2",
   /** Undo / revert. */
   undo: "M3 8.2h6.6a3 3 0 0 1 0 6H6.8 M5.6 5.4 2.8 8.2l2.8 2.8",
   info: "M8 13.4A5.4 5.4 0 1 0 8 2.6a5.4 5.4 0 0 0 0 10.8Z M8 7.4v3.4 M8 5.3v.1",
